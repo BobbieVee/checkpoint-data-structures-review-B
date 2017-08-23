@@ -46,6 +46,7 @@ describe('A binary search tree', function () {
     [15, 66, 45, 36, 5, 54, 99, 19, 95].forEach(function(n) {
       return tree.insert(n);
     });
+    console.log('tree.min = ', tree.min)
     expect(tree.min()).toBe(5);
     expect(tree.max()).toBe(99);
   });

@@ -9,16 +9,16 @@ will not need to edit the lines above and below them.
 // Stacks
 
 function Stack () {
-  // your code here
+  this.stackArray = [];
 }
 
 Stack.prototype.add = function (item) {
-  // your code here
+  this.stackArray.push(item);
   return this; // for chaining, do not edit
 };
 
 Stack.prototype.remove = function () {
-  // your code here
+  return this.stackArray.pop()
 };
 
 //-----------------------------------------
@@ -27,16 +27,16 @@ Stack.prototype.remove = function () {
 // EXTRA CREDIT: remove the `pending` line in the spec to attempt.
 
 function Queue () {
-  // your code here
+  this.queueArray = [];
 }
 
 Queue.prototype.add = function (item) {
-  // your code here
+  this.queueArray.push(item);
   return this; // for chaining, do not edit
 };
 
 Queue.prototype.remove = function () {
-  // your code here
+  return this.queueArray.shift();
 };
 
 //-----------------------------------------
@@ -71,7 +71,7 @@ LinkedList.prototype.forEach = function (iterator) {
 // Association lists
 
 function Alist () {
-  // your code here
+  this.head = null;
 }
 
 function AlistNode (key, value, next) {
@@ -81,12 +81,17 @@ function AlistNode (key, value, next) {
 }
 
 Alist.prototype.set = function (key, value) {
-  // your code here
+  const next = this.head ? this.head : null; 
+  this.head = new AlistNode(key, value, next);
   return this; // for chaining; do not edit
 };
 
 Alist.prototype.get = function (key) {
-  // your code here
+  var step = this.head;
+  while( step !== null && step.key !== key ){
+    step = step.next;
+  }
+  return step === null ? undefined : step.value;
 };
 
 
@@ -102,37 +107,60 @@ function hash (key) {
 }
 
 function HashTable () {
-  this.buckets = Array(20);
-  // your code here
+  this.buckets = [];
+  for (var i=0; i < 20; i++) {
+      this.buckets.push(new Alist())
+  }  
 }
 
 HashTable.prototype.set = function (key, value) {
-  // your code here. DO NOT simply set a prop. on an obj., that is cheating.
+  this.buckets[hash(key)].set(key, value);
   return this; // for chaining, do not edit
 };
 
-HashTable.prototype.get = function (key) {
-  // your code here. DO NOT simply get a prop. from an obj., that is cheating.
+HashTable.prototype.get = function (key) {   return this.buckets[hash(key)].get(key);
 };
 
 //-----------------------------------------
 // Binary search trees
 
 function BinarySearchTree (val) {
-  // your code here
+  this.value = val;
+  this.left = this.right = null;
 }
 
 BinarySearchTree.prototype.insert = function (val) {
-  // your code here
+  if (val < this.value) {
+    if (this.left === null){
+      this.left = new BinarySearchTree(val);
+    } else {
+      this.left.insert(val);
+    }
+  } else {
+    if (this.right === null){
+      this.right = new BinarySearchTree(val);
+    } else {
+      this.right.insert(val);
+    }    
+  }
   return this; // for chaining, do not edit
 };
 
 BinarySearchTree.prototype.min = function () {
-  // your code here
+  console.log('this = ', this)
+  if (this.left === null) {
+    console.log('***this.value = ', this.value)
+    return this.value;
+  }
+  console.log('this.left.value = ', this.left.value)
+  this.left.min();
 };
 
 BinarySearchTree.prototype.max = function () {
-  // your code here
+  if (this.right === null) {
+    return this.value;
+  }
+  this.right.max();
 };
 
 BinarySearchTree.prototype.contains = function (val) {
